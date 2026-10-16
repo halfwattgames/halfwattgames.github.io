@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pawn Shop Kit</title>
+<meta name="description" content="65 interaction-ready pawn shop props, fixtures and room pieces for Unity and Godot. Every door, drawer and lid is a separate, pivoted part with colliders and scripts.">
+<meta property="og:title" content="Pawn Shop Kit: Interactive Props & Modular Room">
+<meta property="og:description" content="65 interaction-ready props, fixtures and room pieces for shop and job simulator games.">
+<meta property="og:image" content="images/social.jpg">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="./">Halfwatt Games</a>
+    <nav><a href="#features">Features</a><a href="#gallery">Gallery</a><a href="#specs">Specs</a><a href="docs.html">Docs</a><a href="#support">Support</a></nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow">Unity · Godot · FBX · GLB</p>
+      <h1>Pawn Shop Kit</h1>
+      <p class="lede">65 interaction-ready props, fixtures and room pieces. Every door, drawer, lid and dial is its own part, pivoted where it really moves, with colliders and ready-to-use scripts.</p>
+      <div class="cta">
+        <span class="btn primary soon">Coming soon to the Unity Asset Store</span>
+        <a class="btn" href="docs.html">Read the documentation</a>
+      </div>
+      <img class="hero-img" src="images/hero.jpg" alt="Isometric view of a furnished pawn shop built from the kit: counter, safe, cash register, display cabinet, shelving, pegboard with guitars">
+    </div>
+  </section>
+
+  <section id="features" class="wrap">
+    <h2>Built for games where players touch things</h2>
+    <div class="grid">
+      <article><h3>Moving parts, ready to use</h3><p>25 hinges, slides and spins across 16 models. Call <code>Toggle()</code> from your raycast, or <code>SetOpenAmount(0..1)</code> for drag-to-open.</p></article>
+      <article><h3>Holders that hold</h3><p>Pick up the ring tray and the rings come with it. Guitars go back on the pegboard or into their case, and a necklace drapes on its display bust.</p></article>
+      <article><h3>Physics-ready props</h3><p>Real-world mass on every pickup and a centre of mass over its base, so dropped items land the right way up.</p></article>
+      <article><h3>Walk-in demo scene</h3><p>A furnished shop and back office using all 65 prefabs, with a first-person controller: open, pick up, put back, crouch.</p></article>
+      <article><h3>Clean and consistent</h3><p>Real-world scale, wall-snapping origins, seamless PBR textures at 1024 px/m, lightmap UVs and 3-level LODs on heavy models.</p></article>
+      <article><h3>Built-in, URP and Godot</h3><p>Built-in materials out of the box, one-click conversion to URP, and Godot 4 GLBs with an import script.</p></article>
+    </div>
+  </section>
+
+  <section id="gallery" class="wrap">
+    <h2>Gallery</h2>
+    <div class="gallery">
+      <figure><img src="images/room.jpg" alt="The pawn shop room" loading="lazy"><figcaption>The shop, built only from kit pieces</figcaption></figure>
+      <figure><img src="images/open.jpg" alt="Fixtures closed and open" loading="lazy"><figcaption>Every door, drawer and lid opens</figcaption></figure>
+      <figure><img src="images/colliders.jpg" alt="Collider wireframes and pivot points" loading="lazy"><figcaption>Colliders and pivots on every moving part</figcaption></figure>
+      <figure><img src="images/contents.jpg" alt="Fixtures with items inside" loading="lazy"><figcaption>Hollow fixtures that hold items</figcaption></figure>
+      <figure><img src="images/counter.jpg" alt="The counter and cash register" loading="lazy"><figcaption>Counter, register and jewellery</figcaption></figure>
+      <figure><img src="images/office.jpg" alt="The back office" loading="lazy"><figcaption>The back office</figcaption></figure>
+      <figure><img src="images/variants.jpg" alt="Colour variants" loading="lazy"><figcaption>18 colour variants</figcaption></figure>
+      <figure><img src="images/unity.jpg" alt="The demo scene in Unity" loading="lazy"><figcaption>The walk-in demo in Unity</figcaption></figure>
+    </div>
+  </section>
+
+  <section id="specs" class="wrap">
+    <h2>Technical details</h2>
+    <table>
+      <tr><th>Models</th><td>47 unique + 18 colour variants (65 prefabs)</td></tr>
+      <tr><th>Triangles</th><td>12 to 12k per model; 3 LOD levels on the 23 models over 3k</td></tr>
+      <tr><th>Moving parts</th><td>25 across 16 models, script-driven (no animation clips)</td></tr>
+      <tr><th>Colliders</th><td>123 boxes (UCX in FBX, BoxColliders in Unity, collision shapes in Godot)</td></tr>
+      <tr><th>Materials</th><td>53 PBR materials; 1024 × 1024 seamless textures</td></tr>
+      <tr><th>UVs</th><td>UV0 tiling box projection; UV1 lightmap UVs</td></tr>
+      <tr><th>Unity</th><td>6000.0 LTS or newer · Built-in and URP</td></tr>
+      <tr><th>Formats</th><td>Unity package, FBX, GLB</td></tr>
+    </table>
+  </section>
+
+  <section id="support" class="wrap support">
+    <h2>Support</h2>
+    <p>Questions, bugs or requests? Email <a href="mailto:halfwattgames@gmail.com">halfwattgames@gmail.com</a>. The full documentation is on the <a href="docs.html">docs page</a> and ships inside the package.</p>
+  </section>
+</main>
+
+<footer class="wrap foot">© 2026 Halfwatt Games</footer>
+</body>
+</html>
