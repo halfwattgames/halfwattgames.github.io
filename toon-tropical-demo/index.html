@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Toon Tropical: Walk-around Demo</title>
+  <meta name="description" content="Play the Toon Tropical stylized island pack in your browser: walk the explorer around, switch themes and day/night.">
+  <style>
+    :root { --ink: #2B1F29; --cream: #FFF6E8; --gold: #F4C430; --gold-hi: #FFD85C; --sea: #3FA7D6;
+            --sky: #8FCBE8; --red: #C0503F; --leaf: #4CAE54; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; overflow: hidden; background: var(--sky); }
+    body { font-family: 'Arial Black', 'Segoe UI Black', 'Arial Rounded MT Bold', sans-serif; color: var(--ink); }
+    #game { position: fixed; inset: 0; width: 100%; height: 100%; display: block; outline: none; }
+
+    /* loading screen */
+    #loader { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center;
+              justify-content: center; gap: 22px; background: linear-gradient(var(--sky), #CFE9F4 60%, #F1D29A);
+              transition: opacity .5s; z-index: 5; padding: 16px; }
+    #loader img { width: min(560px, 86vw); height: auto; }
+    .bar { width: min(420px, 80vw); height: 26px; border: 4px solid var(--ink); border-radius: 16px;
+           background: var(--cream); overflow: hidden; box-shadow: 0 5px 0 var(--ink); }
+    .bar > div { height: 100%; width: 0; background: var(--gold); border-right: 4px solid var(--ink); transition: width .2s; }
+    #status { font-size: 15px; letter-spacing: .06em; text-align: center; }
+    #error { display: none; color: var(--red); font-size: 14px; max-width: 520px; text-align: center; }
+
+    /* in-game interface */
+    .card { background: var(--cream); border: 3px solid var(--ink); border-radius: 16px; box-shadow: 0 4px 0 var(--ink); }
+    #hud { position: fixed; z-index: 2; opacity: 0; transition: opacity .4s; pointer-events: none; }
+    #hud.on { opacity: 1; }
+    #hud > * { pointer-events: auto; }
+    #help { position: fixed; left: 16px; top: 16px; padding: 12px 16px 14px; width: max-content; max-width: calc(100% - 32px); }
+    #help h1 { margin: 0 0 8px; font-size: 21px; line-height: 1; letter-spacing: .02em; color: var(--gold);
+               -webkit-text-stroke: 5px var(--ink); paint-order: stroke fill; }
+    #help h1 span { color: var(--cream); }
+    .row { display: flex; align-items: center; gap: 5px; margin: 7px 0; font-size: 13px; white-space: nowrap; }
+    .row b { margin-right: 10px; }
+    .row b { font-weight: 900; margin-right: 8px; }
+    kbd { display: inline-block; min-width: 26px; padding: 3px 7px; text-align: center; font: inherit; font-size: 12px;
+          background: #fff; border: 2px solid var(--ink); border-radius: 7px; box-shadow: 0 2px 0 var(--ink); }
+    #help .tip { margin-top: 10px; font-size: 11px; opacity: .7; font-family: 'Segoe UI', Arial, sans-serif; font-weight: 700; max-width: 250px; }
+    #help.min { width: auto; padding: 8px 12px; }
+    #help.min .full { display: none; }
+    #help:not(.min) .mini { display: none; }
+    .mini { font-size: 13px; display: flex; gap: 8px; align-items: center; cursor: pointer; }
+
+    #picker { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); display: flex; gap: 12px; white-space: nowrap;
+              padding: 10px 14px; align-items: center; flex-wrap: wrap; justify-content: center; max-width: calc(100% - 32px); }
+    .group { display: flex; gap: 6px; align-items: center; }
+    .group .lbl { font-size: 12px; margin-right: 4px; letter-spacing: .05em; }
+    .sep { width: 3px; align-self: stretch; background: var(--ink); border-radius: 2px; opacity: .25; }
+    .opt { border: 3px solid var(--ink); border-radius: 12px; background: #fff; cursor: pointer; padding: 4px 9px 4px 5px;
+           display: flex; gap: 6px; align-items: center; font: inherit; font-size: 12px; color: var(--ink);
+           box-shadow: 0 3px 0 var(--ink); transition: transform .08s; }
+    .opt:hover { background: var(--gold-hi); }
+    .opt:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--ink); }
+    .opt.on { background: var(--gold); }
+    .sw { width: 22px; height: 22px; border: 2px solid var(--ink); border-radius: 50%; flex: none; }
+    .sw.icon { border: none; border-radius: 0; }
+
+    #links { position: fixed; right: 16px; top: 16px; display: flex; gap: 8px; z-index: 3; }
+    #links a { font-size: 13px; text-decoration: none; color: var(--ink); background: var(--gold);
+               border: 3px solid var(--ink); border-radius: 12px; padding: 7px 13px; box-shadow: 0 3px 0 var(--ink); }
+    #links a:hover { background: var(--gold-hi); }
+    #links a.alt { background: var(--cream); }
+    #touch { display: none; position: fixed; left: 50%; top: 70px; transform: translateX(-50%); z-index: 3;
+             padding: 6px 12px; font-size: 13px; text-align: center; max-width: calc(100% - 32px); }
+
+    @media (max-width: 900px) { .group .lbl { display: none; } }
+    @media (max-width: 720px) {
+      #help { width: auto; max-width: calc(100% - 32px); }
+      #links { top: auto; bottom: 86px; right: 50%; transform: translateX(50%); }
+      .group .lbl { display: none; }
+      .opt span { display: none; }
+      .opt { padding: 4px; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="game" tabindex="-1"></canvas>
+
+  <div id="loader">
+    <img src="logo.png" alt="Toon Tropical">
+    <div class="bar"><div id="fill"></div></div>
+    <div id="status">LOADING THE ISLAND...</div>
+    <div id="error"></div>
+  </div>
+
+  <div id="hud">
+    <div id="help" class="card">
+      <div class="full">
+        <h1>TOON <span>TROPICAL</span></h1>
+        <div class="row"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd><b>walk</b><kbd>Shift</kbd><b>run</b></div>
+        <div class="row"><kbd>E</kbd><b>wave</b><kbd>F</kbd><b>dig</b></div>
+        <div class="row"><kbd>Drag</kbd><b>look</b><kbd>Wheel</kbd><b>zoom</b></div>
+        <div class="row"><kbd>T</kbd><b>theme</b><kbd>N</kbd><b>time</b></div>
+        <div class="row"><kbd>H</kbd><b>hide this panel</b></div>
+        <div class="tip">Find the dig site, the camp on the hill and the dock!</div>
+      </div>
+      <div class="mini" title="Show controls"><kbd>H</kbd> controls</div>
+    </div>
+
+    <div id="picker" class="card">
+      <div class="group" id="themes"><span class="lbl">THEME</span></div>
+      <div class="sep"></div>
+      <div class="group" id="times"><span class="lbl">TIME</span></div>
+    </div>
+  </div>
+
+  <div id="links">
+    <a href="https://www.fab.com/sellers/Halfwatt%20Games" target="_blank" rel="noopener">Get Toon Tropical</a>
+    <a class="alt" href="https://halfwattgames.github.io/docs.html" target="_blank" rel="noopener">Docs</a>
+  </div>
+  <div id="touch" class="card">Best on a computer: walk with WASD, look around by dragging.</div>
+
+  <script>
+    const canvas = document.getElementById('game');
+    const fill = document.getElementById('fill');
+    const status = document.getElementById('status');
+    const help = document.getElementById('help');
+    if (matchMedia('(pointer: coarse)').matches) document.getElementById('touch').style.display = 'block';
+
+    // theme swatches use the palette's own colours; time icons are tiny inline SVGs
+    const THEMES = [['Tropical', '#4CAE54', '#3FA7D6'], ['Autumn', '#D9822B', '#A8541F'],
+                    ['Winter', '#E8F1F8', '#7FB2D6'], ['Spooky', '#6B4A8A', '#2B1F29']];
+    const svg = b => `<svg class="sw icon" viewBox="0 0 24 24">${b}</svg>`;
+    const TIMES = [
+      ['Day', svg('<circle cx="12" cy="12" r="6" fill="#F4C430" stroke="#2B1F29" stroke-width="2"/>' +
+                  [0,45,90,135,180,225,270,315].map(a => `<rect x="11" y="0.5" width="2" height="4" rx="1" fill="#2B1F29" transform="rotate(${a} 12 12)"/>`).join(''))],
+      ['Sunset', svg('<path d="M3 15a9 9 0 0 1 18 0z" fill="#F0643A" stroke="#2B1F29" stroke-width="2"/><rect x="1" y="16" width="22" height="2.5" rx="1.2" fill="#2B1F29"/><rect x="5" y="20" width="14" height="2.2" rx="1.1" fill="#2B1F29"/>')],
+      ['Night', svg('<path d="M16 3a9 9 0 1 0 5 13A7 7 0 0 1 16 3z" fill="#FFF6E8" stroke="#2B1F29" stroke-width="2"/><circle cx="6" cy="5" r="1.3" fill="#2B1F29"/>')],
+    ];
+    let unity = null, theme = 'Tropical', time = 'Day';
+    const send = (m, v) => unity && (v === undefined ? unity.SendMessage('Demo HUD', m) : unity.SendMessage('Demo HUD', m, v));
+
+    function build(groupId, items, isTheme) {
+      const g = document.getElementById(groupId);
+      items.forEach(([name, a, b]) => {
+        const o = document.createElement('button');
+        o.className = 'opt';
+        o.dataset.name = name;
+        o.title = name;
+        o.innerHTML = (isTheme ? `<span class="sw" style="background:linear-gradient(135deg, ${a} 50%, ${b} 50%)"></span>` : a)
+                      + `<span>${name}</span>`;
+        o.onclick = () => { isTheme ? setTheme(name) : setTime(name); canvas.focus(); };
+        g.appendChild(o);
+      });
+    }
+    function mark() {
+      document.querySelectorAll('#themes .opt').forEach(o => o.classList.toggle('on', o.dataset.name === theme));
+      document.querySelectorAll('#times .opt').forEach(o => o.classList.toggle('on', o.dataset.name === time));
+    }
+    function setTheme(n) { theme = n; send('SetTheme', n); mark(); }
+    function setTime(n) { time = n; send('SetTimeOfDay', n); mark(); }
+    build('themes', THEMES, true);
+    build('times', TIMES, false);
+    mark();
+
+    help.querySelector('.mini').onclick = () => help.classList.remove('min');
+    addEventListener('keydown', e => {
+      if (!unity || e.repeat) return;
+      const k = e.key.toLowerCase();
+      if (k === 't') setTheme(THEMES[(THEMES.findIndex(t => t[0] === theme) + 1) % THEMES.length][0]);
+      if (k === 'n') setTime(TIMES[(TIMES.findIndex(t => t[0] === time) + 1) % TIMES.length][0]);
+      if (k === 'h') help.classList.toggle('min');
+    });
+
+    const config = {
+      dataUrl: 'Build/web_demo.data.unityweb',
+      frameworkUrl: 'Build/web_demo.framework.js.unityweb',
+      codeUrl: 'Build/web_demo.wasm.unityweb',
+      streamingAssetsUrl: 'StreamingAssets',
+      companyName: 'Halfwatt Games',
+      productName: 'Toon Tropical - Walk-around Demo',
+      productVersion: '1.0',
+      devicePixelRatio: Math.min(window.devicePixelRatio || 1, 1.5),   // keeps big screens smooth
+    };
+    const script = document.createElement('script');
+    script.src = 'Build/web_demo.loader.js';
+    script.onload = () => {
+      createUnityInstance(canvas, config, p => { fill.style.width = Math.round(p * 100) + '%'; })
+        .then(inst => {
+          unity = inst;
+          const unityHud = location.search.includes('unityhud');   // ?unityhud: show Unity's own panel
+          if (!unityHud) send('UseWebOverlay');                     // hide the in-game panel
+          const loader = document.getElementById('loader');
+          loader.style.opacity = '0';
+          setTimeout(() => loader.remove(), 500);
+          if (!unityHud) document.getElementById('hud').classList.add('on');
+          canvas.focus();
+        })
+        .catch(err => {
+          status.textContent = 'COULD NOT START THE DEMO';
+          const e = document.getElementById('error');
+          e.textContent = 'Your browser may not support WebGL 2. Try a recent Chrome, Edge or Firefox. (' + err + ')';
+          e.style.display = 'block';
+        });
+    };
+    document.body.appendChild(script);
+    canvas.addEventListener('mousedown', () => canvas.focus());
+  </script>
+</body>
+</html>
