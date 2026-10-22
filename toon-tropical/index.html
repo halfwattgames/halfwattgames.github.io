@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Toon Tropical: Documentation</title>
+  <meta name="description" content="Documentation for Toon Tropical, a stylized toon island and dig site asset pack for Unity (URP and Built-in) by Halfwatt Games.">
+  <style>
+    :root { --ink: #2B1F29; --cream: #FFF6E8; --gold: #F4C430; --gold-hi: #FFD85C; --red: #C0503F;
+            --sea: #3FA7D6; --sand: #F1D29A; --paper: #FFFBF3; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 70px; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.6 'Segoe UI', system-ui, Arial, sans-serif; }
+    header { background: linear-gradient(#8FCBE8, #CFE9F4 70%, var(--sand)); border-bottom: 4px solid var(--ink); }
+    .hero { max-width: 980px; margin: 0 auto; padding: 32px 16px 28px; display: flex; gap: 28px; align-items: center; flex-wrap: wrap; }
+    .hero img.logo { width: min(380px, 100%); height: auto; }
+    .hero .pitch { flex: 1 1 320px; }
+    .hero p { margin: 0 0 16px; font-size: 18px; font-weight: 600; }
+    .btns { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn { font: 900 15px 'Arial Black', 'Segoe UI Black', sans-serif; text-decoration: none; color: var(--ink);
+           background: var(--gold); border: 3px solid var(--ink); border-radius: 14px; padding: 9px 16px;
+           box-shadow: 0 4px 0 var(--ink); display: inline-block; }
+    .btn:hover { background: var(--gold-hi); }
+    .btn.alt { background: var(--cream); }
+    nav { position: sticky; top: 0; z-index: 2; background: var(--ink); }
+    nav div { max-width: 980px; margin: 0 auto; padding: 8px 16px; display: flex; gap: 6px; overflow-x: auto; }
+    nav a { color: var(--cream); text-decoration: none; font: 700 13px 'Segoe UI', sans-serif; white-space: nowrap;
+            padding: 5px 10px; border-radius: 9px; }
+    nav a:hover { background: #4A3A46; }
+    main { max-width: 980px; margin: 0 auto; padding: 8px 16px 48px; }
+    .shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 24px 0 8px; }
+    .shots img { width: 100%; height: auto; border: 3px solid var(--ink); border-radius: 14px; display: block; }
+    h2 { font: 900 24px/1.2 'Arial Black', 'Segoe UI Black', sans-serif; margin: 36px 0 10px; padding-bottom: 6px;
+         border-bottom: 4px solid var(--ink); }
+    h3 { font-size: 18px; margin: 20px 0 6px; }
+    code { background: #F3E6D2; padding: 1px 6px; border-radius: 5px; font: 14px Consolas, 'Courier New', monospace; }
+    table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 15px; }
+    .tw { overflow-x: auto; }
+    td, th { border: 2px solid var(--ink); padding: 7px 10px; vertical-align: top; text-align: left; }
+    th { background: var(--gold); }
+    .note { background: #EAF6FB; border-left: 6px solid var(--sea); padding: 10px 14px; margin: 12px 0; border-radius: 0 10px 10px 0; }
+    ol, ul { padding-left: 22px; }
+    li { margin: 5px 0; }
+    footer { border-top: 4px solid var(--ink); background: var(--cream); }
+    footer div { max-width: 980px; margin: 0 auto; padding: 18px 16px; font-size: 14px; }
+    footer a, main a { color: #1F6E99; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="hero">
+    <img class="logo" src="img/logo.png" alt="Toon Tropical: stylized island pack">
+    <div class="pitch">
+      <p>165 toon island and dig site models, 4 animated characters, themes, day and night, and a playable demo.
+         For Unity 6, URP and Built-in.</p>
+      <div class="btns">
+        <a class="btn" href="../toon-tropical-demo/">Play the web demo</a>
+        <a class="btn alt" href="ToonTropical_QuickStart.pdf">Quick Start (PDF)</a>
+      </div>
+    </div>
+  </div>
+</header>
+<nav><div>
+  <a href="#install">Install</a><a href="#assets">Assets</a><a href="#environment">Themes &amp; time</a>
+  <a href="#tiles">Tiles</a><a href="#characters">Characters</a><a href="#other-packs">Other packs</a>
+  <a href="#sky">Sky &amp; effects</a><a href="#performance">Performance</a><a href="#support">Support</a>
+</div></nav>
+<main>
+  <div class="shots">
+    <img src="img/Characters.png" alt="The four animated characters" loading="lazy">
+    <img src="img/DigSite.png" alt="The archaeology dig site" loading="lazy">
+    <img src="img/Themes.png" alt="Tropical, autumn, winter and spooky themes" loading="lazy">
+  </div>
+<h2 id="install">1. Install</h2>
+<ol>
+  <li>Unity <b>6000.0 LTS</b> or newer, with <b>URP</b> or the <b>Built-in Render Pipeline</b>. The shaders contain a SubShader for each, so nothing needs converting.</li>
+  <li>Import the package. Everything lives in <code>Assets/ToonTropical/</code>.</li>
+  <li>Open a demo scene in <code>Demo/</code>: <code>Demo_TileIsland</code>, <code>Demo_HeroIsland</code>, <code>Demo_DigSite</code> or <code>Demo_SmallIsland</code>. Press Play, or just look at the Scene view: the water, wind and fire animate in edit mode too.</li>
+  <li><b>Want to walk around?</b> Open <code>Demo_Explore</code> and press Play: you control the explorer on a roomy island with a camp, a village, a dock and a dig site (see section 5).</li>
+</ol>
+<div class="note">Upgrading from <b>Toon Tropical Lite</b>? Import this pack into the same project. It updates Lite in place, and your scenes keep working.</div>
+
+<h2 id="assets">2. Using the assets</h2>
+<p><b>What's inside:</b> 165 models: modular shore and cliff tiles, palms and plants, rocks, huts, docks, boats, camp gear, treasure and set dressing, plus an <b>archaeology dig site</b> (fossils, dig tools, a camp, ruins and dig pit tiles). Also 4 animated characters, 5 effects and a toon sky.</p>
+<ul>
+  <li>Drag prefabs from <code>Prefabs/</code>. The base mesh casts and receives shadows.</li>
+  <li><b>Game-ready colliders:</b> terrain tiles, docks, stairs, the rope bridge, boats, the hut and the watchtower have exact MeshColliders, so characters can walk on and around them. Other props have a box over their footprint (up to 2 m tall), so flags, fronds and roofs never block a character and nothing can be climbed by accident. Plants and low clutter (under 0.45 m) have no collider, so characters walk through them. Add or swap colliders freely on your own prefab variants.</li>
+  <li><b>Ink outlines</b> are the <code>_Outline</code> child of each prefab. Disable it to turn outlines off on that object.</li>
+  <li>The whole pack uses <b>two materials</b> (<code>M_Island_Palette</code>, <code>M_Island_Outline</code>) and <b>one 256 px palette texture</b>, with GPU instancing on. Scale is 1 unit = 1 m, and pivots are at the bottom center.</li>
+</ul>
+
+<h2 id="environment">3. Environment: themes, time of day, wind</h2>
+<p>Add <b>Toon Tropical &gt; TT Environment</b> to any scene; the demo scenes already have one. It finds its palettes automatically. If they're missing, use <i>Find Palettes</i> from the component's context menu.</p>
+<div class="tw"><table>
+  <tr><th>Setting</th><th>What it does</th></tr>
+  <tr><td>Theme</td><td>Tropical, Autumn, Spooky or Winter. Re-colors every Toon Tropical material at once.</td></tr>
+  <tr><td>Time Of Day</td><td>Day, Sunset or Night. Swaps the palette, re-aims the assigned Sun, sets the camera backgrounds and scales the fire and lamp lights.</td></tr>
+  <tr><td>Wind</td><td>Direction, strength, frequency, flutter and gusts for palms, plants, grass, flags and the tent.</td></tr>
+  <tr><td>Animation clock</td><td>Drives the water, foam, flames and lamp glow. <i>Use Fixed Time</i> freezes them for screenshots.</td></tr>
+</table></div>
+<p>From a script: <code>env.theme = TT_Environment.Theme.Winter; env.timeOfDay = TT_Environment.TimeOfDay.Night; env.Apply();</code></p>
+
+<h2 id="tiles">4. Modular terrain tiles</h2>
+<ul>
+  <li>Tiles are <b>2 × 2 m</b>; snap them on a 2 m grid with any 90° rotation. Water is at 0.40 m, sand at 0.47 m and the plateau at 1.47 m.</li>
+  <li><b>Shore tiles</b>: Edge (A/B/C variants, interchangeable), Corner Outer, Corner Inner. <b>Cliff tiles</b>: Edge, Corner Outer, Corner Inner, Plateau, Ramp.</li>
+  <li>Coastlines and cliffs only cross a tile edge at its midpoint, so any combination lines up. Keep cliffs at least one tile from the water.</li>
+  <li>Dig Pit and Dig Trench replace any plain sand tile.</li>
+  <li>The rope bridge comes in 2 m sections; finish each end with <i>Rope Bridge End</i>.</li>
+</ul>
+
+<h2 id="characters">5. Characters</h2>
+<div class="tw"><table>
+  <tr><th>Prefab</th><th>Clips (all looping, in place)</th></tr>
+  <tr><td>SK_Island_Crab</td><td>Idle, Walk (sideways), Snap</td></tr>
+  <tr><td>SK_Island_Parrot</td><td>Idle, Fly, Squawk</td></tr>
+  <tr><td>SK_Island_Monkey</td><td>Idle, Walk, Cheer</td></tr>
+  <tr><td>SK_Island_Explorer</td><td>Idle, Walk, Dig, Wave</td></tr>
+</table></div>
+<ul>
+  <li>Each prefab has an Animator controller with Idle as the default state and one <b>trigger per clip</b>: <code>animator.SetTrigger("Walk");</code></li>
+  <li><b>TT Character Clip</b> plays a chosen clip with a start offset, so several copies don't move in sync.</li>
+  <li>Clips have no root motion, so move the transform from your own controller.</li>
+</ul>
+
+<ul>
+  <li><b>The explorer is a Humanoid rig</b>, so standard humanoid animations (Mixamo, Asset Store animation packs, Unity's Starter Assets controllers) retarget onto it. Swap the Animator controller or add your own clips. The crab, parrot and monkey use Generic rigs with their own clips.</li>
+</ul>
+
+<h3>Walk-around starter (Demo_Explore)</h3>
+<ul>
+  <li>Press Play in <code>Demo/Demo_Explore</code>: <b>WASD</b> walk, <b>Shift</b> run, <b>E</b> wave, <b>F</b> dig, <b>drag</b> to look around, <b>wheel</b> to zoom. <b>T</b> changes the theme, <b>N</b> the time of day, <b>H</b> hides the help panel. With the Input System package, a gamepad works too.</li>
+  <li><b>TT Explorer Controller</b> (needs a CharacterController) walks a character relative to the camera, drives its Idle / Walk / Wave / Dig triggers and keeps it out of the water. <b>TT Follow Camera</b> orbits and follows it, moving in when something blocks the view. <b>TT Demo HUD</b> is the optional help panel.</li>
+  <li><b>Interactive foliage:</b> add <b>TT Foliage Pusher</b> to any character and the grass, plants, bushes and flowers bend away as it walks through them, then spring back (up to 4 characters at once; set the radius per character). It works through the toon shader, so outlines and shadows bend too, in URP and Built-in.</li>
+  <li>The scripts work with the Input System package or the old Input Manager, whichever your project uses. They are a starting point: swap in your own controller for a full game.</li>
+</ul>
+
+<h2 id="other-packs">6. Using assets from other packs</h2>
+<p><b>Tools &gt; Toon Tropical &gt; Toonify Selection…</b> gives models from other packs, or your own, the Toon Tropical look, so they sit naturally next to the pack's assets:</p>
+<ul>
+  <li><b>Toon materials:</b> each material becomes a copy using the Toon Tropical cel shader. It keeps the model's own texture and colour and follows the theme and time of day as a tint. Cutout foliage keeps alpha clipping and renders double-sided.</li>
+  <li><b>Ink outlines:</b> adds an <code>_Outline</code> child mesh, the same as the pack's prefabs. Width is relative to each object's size; skinned characters work too.</li>
+  <li>Select objects in the scene, then click <i>Toonify</i>. Generated materials and outline meshes go to <code>Assets/ToonTropical_Generated</code>, and the originals are never modified. <i>Remove outlines</i> undoes the outline step.</li>
+  <li>You can also set any material to the <code>ToonTropical/Toon</code> shader by hand and tick <i>Textured Mode</i>.</li>
+</ul>
+
+<h2 id="sky">7. Sky and effects</h2>
+<ul>
+  <li><b>Toon sky:</b> TT Environment's <i>Sky</i> field uses <code>M_Island_Sky</code>. It has a banded gradient, flat inked clouds, distant islands, a sun or moon and stars at night, all following the theme and time of day. Perspective cameras listed in <i>Cameras</i> show it; orthographic ones keep the flat backdrop colour. Untick <i>Use Sky</i> to turn it off.</li>
+  <li><b>Effect prefabs</b> in <code>Prefabs/FX</code>: <code>FX_Splash</code>, <code>FX_Dust</code> (one-shot: instantiate or call <code>Play()</code>), <code>FX_Sparkle</code>, <code>FX_Smoke</code>, <code>FX_Fireflies</code> (looping). They're flat cel shapes with an ink rim and dim with the time of day.</li>
+</ul>
+
+<h2 id="performance">8. Performance tips</h2>
+<ul>
+  <li>Toon shader <i>Shadow Blur</i> (URP only): 0.08 m by default; set it to 0 on mobile.</li>
+  <li>Shadows: about 4 cascades at 4096 and 50 m in a game. At a low resolution or long distance, toon shadow edges stair-step.</li>
+  <li>Outlines double the triangle count. Disable the <code>_Outline</code> children on distant or LOD objects.</li>
+  <li>The UI icons in <code>Icons/</code> are 512 px transparent PNGs of every asset.</li>
+</ul>
+
+<h2 id="support">9. Support</h2>
+<p>Toon Tropical is made by <b>Halfwatt Games</b>. Questions and requests: <b>halfwattgames@gmail.com</b>. Documentation and the playable web demo: <b>halfwattgames.github.io/toon-tropical</b>. If the pack helps your game, a review helps a lot.</p>
+</main>
+<footer><div>
+  Toon Tropical by <b>Halfwatt Games</b> · <a href="mailto:halfwattgames@gmail.com">halfwattgames@gmail.com</a> ·
+  <a href="../docs.html">All Halfwatt Games docs</a>
+</div></footer>
+</body>
+</html>
